@@ -151,6 +151,16 @@ func (o *SouthXchange) PlaceOrder(listing string, reference string, orderSide Or
 	return order, err
 }
 
+// gets and array containing all orders
+func (o *SouthXchange) ListOrders() (orders []PlacedOrderResponse, err error) {
+	r, err := o.client.do("POST", "listOrders", nil, true)
+	if err != nil {
+		return
+	}
+	err = json.Unmarshal(r, &orders)
+	return orders, err
+}
+
 // GetTransactions is used to retrieve your transaction history
 func (b *SouthXchange) GetTransactions(start uint64, limit uint32, sort string, desc bool) (transactions []Transaction, err error) {
 	payload := make(map[string]string)

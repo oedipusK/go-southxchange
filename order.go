@@ -9,3 +9,14 @@ type Order struct {
 	ListingCurrency   string
 	ReferenceCurrency string
 }
+
+type PlacedOrderResponse struct {
+	OrderCode string
+}
+
+type OrderType string
+
+const (
+	Buy  OrderType = "buy"
+	Sell OrderType = "sell"
+)

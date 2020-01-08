@@ -112,14 +112,14 @@ func (c *client) doTimeoutRequest(timer *time.Timer, req *http.Request) (*http.R
 }
 
 // do prepare and process HTTP request to SouthXchange API
-func (c *client) do(method string, ressource string, payload map[string]string, authNeeded bool) (response []byte, err error) {
+func (c *client) do(APIBase string, method string, ressource string, payload map[string]string, authNeeded bool) (response []byte, err error) {
 	connectTimer := time.NewTimer(c.httpTimeout)
 
 	var rawurl string
 	if strings.HasPrefix(ressource, "http") {
 		rawurl = ressource
 	} else {
-		rawurl = fmt.Sprintf("%s/%s", API_BASE, ressource)
+		rawurl = fmt.Sprintf("%s/%s", APIBase, ressource)
 	}
 	if payload == nil {
 		payload = make(map[string]string)
@@ -166,15 +166,15 @@ func (c *client) do(method string, ressource string, payload map[string]string, 
 
 	defer resp.Body.Close()
 	/*
-	var reader io.ReadCloser
-	switch resp.Header.Get("Content-Encoding") {
-	case "gzip":
-		reader, err = gzip.NewReader(resp.Body)
-		defer reader.Close()
-	default:
-		reader = resp.Body
-	}
-	response, err = ioutil.ReadAll(reader)
+		var reader io.ReadCloser
+		switch resp.Header.Get("Content-Encoding") {
+		case "gzip":
+			reader, err = gzip.NewReader(resp.Body)
+			defer reader.Close()
+		default:
+			reader = resp.Body
+		}
+		response, err = ioutil.ReadAll(reader)
 	*/
 	response, err = ioutil.ReadAll(resp.Body)
 	//fmt.Println(fmt.Sprintf("reponse %s", response), err)
@@ -182,7 +182,7 @@ func (c *client) do(method string, ressource string, payload map[string]string, 
 		return response, err
 	}
 	if resp.StatusCode != 200 && resp.StatusCode != 401 {
-		err = errors.New(resp.Status + ": "+strings.Trim(string(response), "\""))
+		err = errors.New(resp.Status + ": " + strings.Trim(string(response), "\""))
 	}
 	return response, err
 }

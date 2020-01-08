@@ -16,7 +16,8 @@ import (
 )
 
 const (
-	API_BASE = "https://www.southxchange.com/api" // SouthXchange API endpoint
+	API_BASE    = "https://www.southxchange.com/api" // SouthXchange API endpoint
+	API_BASE_V2 = "https://www.southxchange.com/api/v2"
 )
 
 // New returns an instantiated SouthXchange struct
@@ -70,7 +71,7 @@ func (o *SouthXchange) SetDebug(enable bool) {
 
 // GetMarketSummaries is used to get the last 24 hour summary of all active exchanges
 func (b *SouthXchange) GetMarketSummaries() (marketSummaries []MarketSummary, err error) {
-	response, err := b.client.do("GET", "markets", nil, false)
+	response, err := b.client.do(API_BASE, "GET", "markets", nil, false)
 	if err != nil {
 		return
 	}
@@ -80,7 +81,7 @@ func (b *SouthXchange) GetMarketSummaries() (marketSummaries []MarketSummary, er
 
 // GetOpenOrders returns orders that you currently have opened.
 func (b *SouthXchange) GetOpenOrders() (openOrders []Order, err error) {
-	r, err := b.client.do("POST", "listOrders", nil, true)
+	r, err := b.client.do(API_BASE, "POST", "listOrders", nil, true)
 	if err != nil {
 		return
 	}
@@ -88,11 +89,21 @@ func (b *SouthXchange) GetOpenOrders() (openOrders []Order, err error) {
 	return
 }
 
+func (b *SouthXchange) GetOrder(orderCode string) (order Order, err error) {
+	r, err := b.client.do(API_BASE_V2, "POST", "getOrder", map[string]string{"Code": orderCode}, true)
+	if err != nil {
+		return
+	}
+
+	err = json.Unmarshal(r, &order)
+	return
+}
+
 // Account
 
 // GetBalances is used to retrieve all balances from your account
 func (o *SouthXchange) GetBalances() (balances []Balance, err error) {
-	r, err := o.client.do("POST", "listBalances", nil, true)
+	r, err := o.client.do(API_BASE, "POST", "listBalances", nil, true)
 	if err != nil {
 		return
 	}
@@ -103,7 +114,7 @@ func (o *SouthXchange) GetBalances() (balances []Balance, err error) {
 // GetDepositAddress is sed to generate or retrieve an address for a specific currency.
 // currency a string literal for the currency (ie. BTC)
 func (b *SouthXchange) GetDepositAddress(currency string) (address string, err error) {
-	r, err := b.client.do("POST", "generatenewaddress", map[string]string{"currency": currency}, true)
+	r, err := b.client.do(API_BASE, "POST", "generatenewaddress", map[string]string{"currency": currency}, true)
 	if err != nil {
 		return
 	}
@@ -117,7 +128,7 @@ func (b *SouthXchange) GetDepositAddress(currency string) (address string, err e
 // quantity float the quantity of coins to withdraw
 // fee float the quantity of coins to withdraw
 func (o *SouthXchange) Withdraw(address string, currency string, quantity float64) (withdraw WithdrawalInfo, err error) {
-	r, err := o.client.do("POST", "withdraw", map[string]string{
+	r, err := o.client.do(API_BASE, "POST", "withdraw", map[string]string{
 		"currency": currency,
 		"address":  address,
 		"amount":   strconv.FormatFloat(quantity, 'f', -1, 64),
@@ -146,7 +157,7 @@ func (b *SouthXchange) GetTransactions(start uint64, limit uint32, sort string, 
 	}
 	payload["SortField"] = sort
 	payload["Descending"] = strconv.FormatBool(desc)
-	r, err := b.client.do("POST", "listTransactions", payload, true)
+	r, err := b.client.do(API_BASE, "POST", "listTransactions", payload, true)
 	if err != nil {
 		return
 	}

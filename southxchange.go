@@ -89,6 +89,7 @@ func (b *SouthXchange) GetOpenOrders() (openOrders []Order, err error) {
 	return
 }
 
+// GetOrder returns an order based on the orderCode
 func (b *SouthXchange) GetOrder(orderCode string) (order Order, err error) {
 	r, err := b.client.do(API_BASE_V2, "POST", "getOrder", map[string]string{"Code": orderCode}, true)
 	if err != nil {

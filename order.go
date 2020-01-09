@@ -8,4 +8,6 @@ type Order struct {
 	LimitPrice        float64
 	ListingCurrency   string
 	ReferenceCurrency string
+	Status            string
+	DateAdded         string
 }

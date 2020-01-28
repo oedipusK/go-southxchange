@@ -142,8 +142,11 @@ func (o *SouthXchange) Withdraw(address string, currency string, quantity float6
 }
 
 // GetTransactions is used to retrieve your transaction history
-func (b *SouthXchange) GetTransactions(start uint64, limit uint32, sort string, desc bool) (transactions []Transaction, err error) {
+func (b *SouthXchange) GetTransactions(transactionType string, start uint64, limit uint32, sort string, desc bool) (transactions []Transaction, err error) {
 	payload := make(map[string]string)
+	if transactionType == "" {
+		transactionType = "transactions"
+	}
 	if start > 0 {
 		payload["PageIndex"] = strconv.FormatUint(uint64(start), 10)
 	}
@@ -158,6 +161,7 @@ func (b *SouthXchange) GetTransactions(start uint64, limit uint32, sort string, 
 	}
 	payload["SortField"] = sort
 	payload["Descending"] = strconv.FormatBool(desc)
+	payload["TransactionType"] = transactionType
 	r, err := b.client.do(API_BASE, "POST", "listTransactions", payload, true)
 	if err != nil {
 		return

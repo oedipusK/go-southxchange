@@ -146,7 +146,7 @@ func (o *SouthXchange) Withdraw(address string, currency string, quantity float6
 // orderSide string enum
 // amount float the quantity of coins to sell
 // limitPrice float optional price in reference currency. ff nil then order is executed at market price
-func (o *SouthXchange) PlaceOrder(listing string, reference string, orderSide OrderType, amount float64, limitPrice float64, marketPrice bool) (order PlacedOrderResponse, err error) {
+func (o *SouthXchange) PlaceOrder(listing string, reference string, orderSide OrderType, amount float64, limitPrice float64, marketPrice bool) (orderCode string, err error) {
 	var params = make(map[string]string)
 	params["listingCurrency"] = listing
 	params["referenceCurrency"] = reference
@@ -159,18 +159,20 @@ func (o *SouthXchange) PlaceOrder(listing string, reference string, orderSide Or
 	if err != nil {
 		return
 	}
-	err = json.Unmarshal(r, &order)
-	return order, err
+	orderCode = string(r)
+	return
 }
 
 // gets and array containing all orders
-func (o *SouthXchange) ListOrders() (orders []PlacedOrderResponse, err error) {
+func (o *SouthXchange) ListOrders() (orders []string, err error) {
 	r, err := o.client.do(API_BASE, "POST", "listOrders", nil, true)
 	if err != nil {
 		return
 	}
-	err = json.Unmarshal(r, &orders)
-	return orders, err
+	for _, b := range r {
+		orders = append(orders, string(b))
+	}
+	return
 }
 
 // GetTransactions is used to retrieve your transaction history

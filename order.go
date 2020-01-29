@@ -12,10 +12,6 @@ type Order struct {
 	DateAdded         string
 }
 
-type PlacedOrderResponse struct {
-	OrderCode string
-}
-
 type OrderType string
 
 const (

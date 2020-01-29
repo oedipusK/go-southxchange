@@ -11,3 +11,14 @@ type Order struct {
 	Status            string
 	DateAdded         string
 }
+
+type PlacedOrderResponse struct {
+	OrderCode string
+}
+
+type OrderType string
+
+const (
+	Buy  OrderType = "buy"
+	Sell OrderType = "sell"
+)

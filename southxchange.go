@@ -155,7 +155,7 @@ func (o *SouthXchange) PlaceOrder(listing string, reference string, orderSide Or
 	if !marketPrice {
 		params["limitPrice"] = strconv.FormatFloat(limitPrice, 'f', -1, 64)
 	}
-	r, err := o.client.do("POST", "placeOrder", params, true)
+	r, err := o.client.do(API_BASE, "POST", "placeOrder", params, true)
 	if err != nil {
 		return
 	}
@@ -165,7 +165,7 @@ func (o *SouthXchange) PlaceOrder(listing string, reference string, orderSide Or
 
 // gets and array containing all orders
 func (o *SouthXchange) ListOrders() (orders []PlacedOrderResponse, err error) {
-	r, err := o.client.do("POST", "listOrders", nil, true)
+	r, err := o.client.do(API_BASE, "POST", "listOrders", nil, true)
 	if err != nil {
 		return
 	}

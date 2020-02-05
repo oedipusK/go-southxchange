@@ -79,6 +79,15 @@ func (b *SouthXchange) GetMarketSummaries() (marketSummaries []MarketSummary, er
 	return
 }
 
+func (s *SouthXchange) GetMarketPrice(listing string, reference string) (marketPrice MarketPrice, err error) {
+	response, err := s.client.do(API_BASE, "GET", "price/"+listing+"/"+reference, nil, false)
+	if err != nil {
+		return
+	}
+	err = json.Unmarshal(response, &marketPrice)
+	return
+}
+
 // GetOpenOrders returns orders that you currently have opened.
 func (b *SouthXchange) GetOpenOrders() (openOrders []Order, err error) {
 	r, err := b.client.do(API_BASE, "POST", "listOrders", nil, true)

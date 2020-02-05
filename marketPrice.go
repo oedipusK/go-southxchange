@@ -1,9 +1,9 @@
 package southxchange
 
 type MarketPrice struct {
-	Bid           string `json:"Bid"`
-	Ask           string `json:"Ask"`
-	Last          string `json:"Last"`
-	Variation24Hr string `json:"Variation24Hr"`
-	Volume24Hr    string `json:"Volume24Hr"`
+	Bid           float64 `json:"Bid"`
+	Ask           float64 `json:"Ask"`
+	Last          float64 `json:"Last"`
+	Variation24Hr float64 `json:"Variation24Hr"`
+	Volume24Hr    float64 `json:"Volume24Hr"`
 }

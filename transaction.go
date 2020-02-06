@@ -1,6 +1,7 @@
 package southxchange
 
 type Transaction struct {
+	TradeId       string
 	Date          Timestamp
 	Type          string
 	Amount        float64

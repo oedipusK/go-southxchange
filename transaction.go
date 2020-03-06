@@ -2,6 +2,7 @@ package southxchange
 
 type Transaction struct {
 	TradeId       int
+	MovementId	  int64
 	Date          Timestamp
 	Type          string
 	Amount        float64

@@ -98,6 +98,15 @@ func (b *SouthXchange) GetOpenOrders() (openOrders []Order, err error) {
 	return
 }
 
+func (b *SouthXchange) GetBookOrders(listing string, reference string) (book Book, err error) {
+	response, err := b.client.do(API_BASE, "GET", "book/"+listing+"/"+reference, nil, false)
+	if err != nil {
+		return
+	}
+	err = json.Unmarshal(response, &book)
+	return
+}
+
 // GetOrder returns an order based on the orderCode
 func (b *SouthXchange) GetOrder(orderCode string) (order Order, err error) {
 	r, err := b.client.do(API_BASE_V2, "POST", "getOrder", map[string]string{"Code": orderCode}, true)

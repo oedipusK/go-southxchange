@@ -99,7 +99,7 @@ func (b *SouthXchange) GetOpenOrders() (openOrders []Order, err error) {
 }
 
 func (b *SouthXchange) GetBookOrders(listing string, reference string) (book Book, err error) {
-	response, err := b.client.do(API_BASE, "GET", "book/"+listing+"/"+reference, nil, false)
+	response, err := b.client.do(API_BASE_V2, "GET", "book/"+listing+"/"+reference, nil, false)
 	if err != nil {
 		return
 	}
